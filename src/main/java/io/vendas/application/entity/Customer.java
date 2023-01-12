@@ -19,8 +19,8 @@ public class Customer {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "nome")
-    private String nome;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "cpf")
     private String cpf;
