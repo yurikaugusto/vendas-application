@@ -2,12 +2,11 @@ package io.vendas.application.service.impl;
 
 import io.vendas.application.dto.CustomerDTO;
 import io.vendas.application.entity.Customer;
+import io.vendas.application.exceptions.CustomerNotFoundException;
 import io.vendas.application.repository.CustomerRepository;
 import io.vendas.application.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -34,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
             Customer customer = optionalCustomer.get();
             return new CustomerDTO(customer.getId(), customer.getName(), customer.getCpf(), customer.getOrders());
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, MESSAGE_CUSTOMER_NOT_FOUND);
+        throw new CustomerNotFoundException(MESSAGE_CUSTOMER_NOT_FOUND);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
             customerFound.setName(customerDTO.getName());
             customerRepository.save(customerFound);
             return customerFound;
-        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, MESSAGE_CUSTOMER_NOT_FOUND));
+        }).orElseThrow(() -> new CustomerNotFoundException(MESSAGE_CUSTOMER_NOT_FOUND));
     }
 
     @Override
@@ -52,6 +51,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.findById(id).map(customerFound -> {
             customerRepository.deleteById(id);
             return customerFound;
-        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, MESSAGE_CUSTOMER_NOT_FOUND));
+        }).orElseThrow(() -> new CustomerNotFoundException(MESSAGE_CUSTOMER_NOT_FOUND));
     }
 }
